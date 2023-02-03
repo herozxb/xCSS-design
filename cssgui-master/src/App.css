@@ -27,10 +27,11 @@
 
 .control-panel-left {
     background-color: #edeff2;
-    padding: 20px 10px 20px 20px;
+    padding: 20px 20px 20px 20px;
     border-radius: 6px;
     width: 300px;
     height: 100%;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 100;
@@ -38,7 +39,7 @@
 
 .control-panel-right {
     background-color: #edeff2;
-    padding: 20px 10px 20px 20px;
+    padding: 20px 20px 20px 20px;
     border-radius: 6px;
     width: 300px;
     height: 100%;

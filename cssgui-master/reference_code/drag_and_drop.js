@@ -1,30 +1,202 @@
-import React, {useState} from 'react';
-import hljs from 'highlight.js';
-import reactToCSS from 'react-style-object-to-css'
-import { Button, ButtonGroup, Dialog, FormGroup, Classes, Callout, Icon, Switch,Tree } from "@blueprintjs/core";
+import React from "react";
+import "./styles.css";
 
-import {StyleCodeDialog} from '../components/style-code-dialog'
-import {GradientPanel} from '../components/gradient-panel'
-import { NumericInput } from '../components/numeric-input'
-import {useCoreDataStore} from '../store/core'
-import {useUIStore} from '../store/ui'
-import {createStyleObj} from '../utils/style'
-import {useConfigStore} from '../store/config'
-
-
-import { HTML5Backend } from "react-dnd-html5-backend";
+import Backend from "react-dnd-html5-backend";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { Tree, Classes } from "@blueprintjs/core";
+
+export default function App() {
+  return (
+    <div className="App">
+      <DndProvider backend={Backend}>
+        <h1>Drag and Drop Tree Example</h1>
+
+        <Tree contents={INITIAL_STATE} className={Classes.ELEVATION_0} />
+      </DndProvider>
+    </div>
+  );
+}
+
+function DraggableItem() {
+  const [collectedProps, drag] = useDrag({
+    item: { id: 1, type: "DRAGGABLE_ITEM" }
+  });
+
+  return <div ref={drag}>I am draggable </div>;
+}
+
+function DroppableItem(props) {
+  const [collectedProps, drop] = useDrop({
+    accept: "DRAGGABLE_ITEM",
+    drop: (item, monitor) => {
+      console.log(item);
+    }
+  });
+
+  return <div ref={drop}>Drop me here!</div>;
+}
+
+const INITIAL_STATE = [
+  {
+    id: 0,
+    hasCaret: true,
+    icon: "folder-close",
+    label: <DraggableItem />
+  },
+  {
+    id: 2,
+    hasCaret: true,
+    icon: "folder-close",
+    label: <DroppableItem />,
+    disabled: true
+  }
+];
 
 
-import '@blueprintjs/core/lib/css/blueprint.css';
+const HtmlNode = (tagName, attributes = [], children = []) => {
+  const e = document.createElement(tagName)
+  for (const [k, v] of attributes) e.setAttribute(k, v)
+  for (const child of children) e.appendChild(toNode(child))
+  return e
+}
 
-function DevPanel() {
+const TextNode = (text) => {
+  return document.createTextNode(text)
+}
+  
+const toNode = t => {
+  switch (t?.type) {
+    case "Elem": return HtmlNode(t.tagName, t.attributes, t.children)
+    case "TextElem": return TextNode(t.textContent)
+    default: throw Error("unsupported type: " + t.type)
+  }
+}
+
+const json2html = json =>
+  toNode(JSON.parse(json))
+
+const parsedJson =
+  {"type":"Elem","tagName":"MAIN","attributes":[],"children":[{"type":"TextElem","textContent":"\n  "},{"type":"Elem","tagName":"H1","attributes":[["class","mainHeading"]],"children":[{"type":"TextElem","textContent":"Some heading"}]},{"type":"TextElem","textContent":"\n  "},{"type":"Elem","tagName":"UL","attributes":[["id","menu"]],"children":[{"type":"TextElem","textContent":"\n    "},{"type":"Elem","tagName":"LI","attributes":[],"children":[{"type":"Elem","tagName":"A","attributes":[["href","/a"]],"children":[{"type":"TextElem","textContent":"a"}]}]},{"type":"TextElem","textContent":"\n    "},{"type":"Elem","tagName":"LI","attributes":[],"children":[{"type":"Elem","tagName":"A","attributes":[["href","/b"]],"children":[{"type":"TextElem","textContent":"b"}]}]},{"type":"TextElem","textContent":"\n    "},{"type":"Elem","tagName":"LI","attributes":[],"children":[{"type":"Elem","tagName":"A","attributes":[["href","/c"]],"children":[{"type":"TextElem","textContent":"c"}]}]},{"type":"TextElem","textContent":"\n  "}]},{"type":"TextElem","textContent":"\n  "},{"type":"Elem","tagName":"P","attributes":[],"children":[{"type":"TextElem","textContent":"some text"}]},{"type":"TextElem","textContent":"\n"}]}
+
+document.body.appendChild(toNode(parsedJson))
 
 
 
-  const [isFolderOpen, setFolderOpen] = React.useState(false);
-  // Tree Data
+
+
+  const Elem = e => ({
+    tagName: 
+      typeof e.tagName == 'undefined' ? e.tagName : 'None',
+    textContent:
+      typeof e.textContent == 'undefined' ? e.textContent : 'None',
+    attributes:
+      typeof e.attributes == 'undefined' ? Array.from(e.attributes, ({name, value}) => [name, value]) : 'None',
+    children:
+      typeof e.children == 'undefined' ? Array.from(e.children, Elem) : 'None', 
+  })
+
+  const html2json = e => JSON.stringify(Elem(e), null, '  ')
+
+    console.log(html2json(MyDiv1.innerHTML))
+
+
+
+
+
+
+
+
+
+function converter(dom) {
+    if (dom.nodeType === Node.TEXT_NODE) {
+        return dom.nodeValue;
+    }
+    if (dom.nodeType === Node.DOCUMENT_NODE) {
+        dom = dom.documentElement;
+    }
+    const obj = {};
+    obj.nodeType = dom.nodeType;
+    if (dom.nodeType === Node.ELEMENT_NODE) {
+        obj.tagName = dom.tagName;
+        obj.attributes = []; // Array.from(obj.attributes) gives us a lot of things we don't want
+        for (let i = 0, len = dom.attributes.length; i < len; ++i) {
+            const attr = dom.attributes[i];
+            obj.attributes.push({name: attr.name, value: attr.value});
+        }
+        obj.children = [];
+        for (let child = dom.firstChild; child; child = child.nextSibling) {
+            obj.children.push(converter(child));
+        }
+    } else {
+        obj.nodeValue = dom.nodeValue;
+    }
+    return obj;
+}
+const json = JSON.stringify(converter(document.getElementById("example")), null, 4);
+console.log(json);
+
+
+
   const treeData = [
+      {
+          id: 1,
+          hasCaret: true,
+          isExpanded: isFolderOpen,
+          icon: "folder-close",
+          label: "Folders",
+          childNodes: [
+              {
+                  id: 11,
+                  icon: "folder-open",
+                  label: "Documents"
+              },
+              {
+                  id: 12,
+                  icon: "folder-open",
+                  label: "Videos"
+              },
+              {
+                  id: 13,
+                  icon: "folder-open",
+                  label: "Pictures"
+              },
+              {
+                  id: 14,
+                  hasCaret: true,
+                  isExpanded: isFolderOpen,
+                  icon: "folder-open",
+                  label: "Music",
+                  childNodes: [
+                      {
+                          id: 15,
+                          icon: "folder-open",
+                          label: "Documents"
+                      },
+                      {
+                          id: 16,
+                          icon: "folder-open",
+                          label: "Videos"
+                      },
+                      {
+                          id: 17,
+                          icon: "folder-open",
+                          label: "Pictures"
+                      },
+                      {
+                          id: 18,
+                          icon: "folder-open",
+                          label: "Music",
+                          
+
+                      }
+                  ]
+
+
+              }
+          ]
+      }
+  ];
+
 
 
 
@@ -34,7 +206,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "DIV class:canvas-panel",
+          label: "Folders",
     "nodeType": 1,
     "tagName": "DIV",
     "attributes": [
@@ -49,7 +221,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "DIV class:canvas-item",
+          label: "Folders",
             "nodeType": 1,
             "tagName": "DIV",
             "attributes": [
@@ -68,7 +240,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "DIV class:selected-element-cursor",
+          label: "Folders",
                     "nodeType": 1,
                     "tagName": "DIV",
                     "attributes": [
@@ -86,7 +258,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "DIV class:canvas-item",
+          label: "Folders",
             "nodeType": 1,
             "tagName": "DIV",
             "attributes": [
@@ -106,7 +278,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "DIV class:canvas-item",
+          label: "Folders",
             "nodeType": 1,
             "tagName": "DIV",
             "attributes": [
@@ -126,7 +298,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "DIV class:footer",
+          label: "Folders",
             "nodeType": 1,
             "tagName": "DIV",
             "attributes": [
@@ -141,7 +313,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "TEXT",
+          label: "Folders",
                     "nodeType": 3,
                     "tagName": "a",
                     "textContent": "Created by "
@@ -151,7 +323,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "A",
+          label: "Folders",
                     "nodeType": 1,
                     "tagName": "A",
                     "attributes": [
@@ -170,7 +342,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "TEXT",
+          label: "Folders",
                             "nodeType": 3,
                             "tagName": "a",
                             "textContent": "Guangyi Li"
@@ -182,7 +354,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "TEXT",
+          label: "Folders",
                     "nodeType": 3,
                     "tagName": "a",
                     "textContent": " / "
@@ -192,7 +364,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "A",
+          label: "Folders",
                     "nodeType": 1,
                     "tagName": "A",
                     "attributes": [
@@ -207,7 +379,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "TEXT",
+          label: "Folders",
                             "nodeType": 3,
                             "tagName": "a",
                             "textContent": "Email Me"
@@ -219,7 +391,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "TEXT",
+          label: "Folders",
                     "nodeType": 3,
                     "tagName": "a",
                     "textContent": "  / "
@@ -229,7 +401,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "A",
+          label: "Folders",
                     "nodeType": 1,
                     "tagName": "A",
                     "attributes": [
@@ -248,7 +420,7 @@ function DevPanel() {
           hasCaret: true,
           isExpanded: isFolderOpen,
           icon: "folder-close",
-          label: "TEXT",
+          label: "Folders",
                             "nodeType": 3,
                             "tagName": "a",
                             "textContent": "Source Code"
@@ -259,142 +431,3 @@ function DevPanel() {
         }
     ]
 } 
-
-
-
-
-  ];
-
-
-
-  function converter(dom) {
-      //console.log("=================dom.nodeType===================")
-      //console.log(dom.nodeType );
-      const obj = {};
-      if (dom.nodeType === Node.TEXT_NODE) {
-          obj.nodeType = 3
-          obj.tagName = "a"
-          obj.textContent = dom.nodeValue;
-          return obj;
-      }
-      if (dom.nodeType === Node.DOCUMENT_NODE) {
-          //console.log("document")
-          dom = dom.documentElement;
-      }
-
-      obj.nodeType = dom.nodeType;
-      if (dom.nodeType === Node.ELEMENT_NODE) {
-          obj.tagName = dom.tagName;
-          obj.attributes = []; // Array.from(obj.attributes) gives us a lot of things we don't want
-          for (let i = 0, len = dom.attributes.length; i < len; ++i) {
-              const attr = dom.attributes[i];
-              obj.attributes.push({name: attr.name, value: attr.value});
-          }
-          obj.children = [];
-          for (let child = dom.firstChild; child; child = child.nextSibling) {
-              obj.children.push(converter(child));
-          }
-      } else {
-          obj.nodeType = 3
-          obj.tagName = "a"
-          obj.textContent = dom.nodeValue;
-      }
-      return obj;
-  }
-
-  const HtmlNode = (tagName, attributes = [], children = []) => {
-    const e = document.createElement(tagName)
-    for (const attribute of attributes) { e.setAttribute(attribute.name, attribute.value); }
-    for (const child of children) e.appendChild(toNode(child))
-    return e
-  }
-
-  const TextNode = (text) => {
-    return document.createTextNode(text)
-  }
-    
-  const toNode = t => {
-    switch (t?.nodeType) {
-      case 1: return HtmlNode(t.tagName, t.attributes, t.children)
-      case 3: return TextNode(t.textContent)
-    }
-  }
-
-  const json2html = json =>
-    toNode(JSON.parse(json))
-
-
-  function get_dev_content()
-  {
-    var MyDiv1 = document.getElementsByClassName('canvas-panel')[0];
-    //console.log(MyDiv1.innerHTML)
-    //console.log("========================================");
-    const json = JSON.stringify(converter(MyDiv1), null, 4);
-    console.log(json);
-    //console.log(json2html(json));
-    document.getElementsByTagName('body')[0].appendChild(json2html(json));
-
-  }
-
-
-  function DraggableItem() {
-    const [collectedProps, drag] = useDrag({
-      item: { id: 1 }, type: "DRAGGABLE_ITEM"
-    });
-
-    return <div ref={drag}>I am draggable </div>;
-  }
-
-  function DroppableItem(props) {
-    const [collectedProps, drop] = useDrop({
-      accept: "DRAGGABLE_ITEM",
-      drop: (item, monitor) => {
-        console.log(item);
-      }
-    });
-
-    return <div ref={drop}>Drop me here!</div>;
-  }
-
-  const INITIAL_STATE = [
-    {
-      id: 0,
-      hasCaret: true,
-      icon: "folder-close",
-      label: <DraggableItem />
-    },
-    {
-      id: 2,
-      hasCaret: true,
-      icon: "folder-close",
-      label: <DroppableItem />,
-      disabled: true
-    }
-  ];
-
-
-
-  return <div >
-
-    <ButtonGroup fill style={{ marginTop: 10 }}>
-            <Button onClick={() => get_dev_content()} icon="plus">New Dev</Button>
-    </ButtonGroup>
-
-    <div style={{
-        display: 'block',
-        width: 260,
-        padding: 0    }}>
-        <Tree
-            contents={treeData}
-            onNodeMouseEnter={() => setFolderOpen(true)}
-            onNodeMouseLeave={() => setFolderOpen(false)}
-        />
-        <DndProvider backend={HTML5Backend}>
-          <Tree contents={INITIAL_STATE} className={Classes.ELEVATION_0} />
-        </DndProvider>
-    </div>
-
-  </div>
-}
-
-export default DevPanel
