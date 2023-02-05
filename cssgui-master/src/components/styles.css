@@ -1,0 +1,31 @@
+
+.wrapper_tree {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.wrapper_tree {
+  display: flex;
+  flex-direction: column;
+}
+
+.bar_wrapper_tree {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.tree_wrapper_tree {
+  height: calc(100% - 25px);
+}
+
+.previous_tree {
+  margin-left: 10px;
+}
+
+.next_tree,
+.collapse_tree {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+

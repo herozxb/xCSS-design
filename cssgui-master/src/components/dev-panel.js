@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import hljs from 'highlight.js';
 import reactToCSS from 'react-style-object-to-css'
-import { Button, ButtonGroup, Dialog, FormGroup, Classes, Callout, Icon, Switch,Tree } from "@blueprintjs/core";
+import { Button, ButtonGroup, Dialog, FormGroup, Classes, Callout, Icon, Switch } from "@blueprintjs/core";
 
 import {StyleCodeDialog} from '../components/style-code-dialog'
 import {GradientPanel} from '../components/gradient-panel'
@@ -11,20 +11,28 @@ import {useUIStore} from '../store/ui'
 import {createStyleObj} from '../utils/style'
 import {useConfigStore} from '../store/config'
 
+import SortableTree from '@nosferatu500/react-sortable-tree';
 
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-
-
+import '@nosferatu500/react-sortable-tree/style.css';
 import '@blueprintjs/core/lib/css/blueprint.css';
+
+import Tree from "./tree"
 
 function DevPanel() {
 
 
+  const seed =   [
+        { title: 'Chicken'},
+      ]
 
   const [isFolderOpen, setFolderOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+
+  const [treeData, setTreeData] = useState(seed);
+
   // Tree Data
-  const treeData = [
+  const treeData_pre = [
 
 
 
@@ -860,19 +868,24 @@ function DevPanel() {
     <ButtonGroup fill style={{ marginTop: 10 }}>
             <Button onClick={() => get_dev_content()} icon="plus">New Dev</Button>
     </ButtonGroup>
+    <ButtonGroup fill style={{ marginTop: 10 }}>
+            <Button intent="primary" icon="code" onClick={() => setIsOpen(!isOpen) } >Show Dev Tree</Button>
+    </ButtonGroup>
+
 
     <div style={{
         display: 'block',
-        width: 260,
+        width: 800,
         padding: 0    }}>
-        <Tree
-            contents={tree_data}
-            onNodeMouseEnter={() => setFolderOpen(true)}
-            onNodeMouseLeave={() => setFolderOpen(false)}
-        />
-        <DndProvider backend={HTML5Backend}>
-          <Tree contents={INITIAL_STATE} className={Classes.ELEVATION_0} />
-        </DndProvider>
+
+      <Dialog isOpen={isOpen} style={{ width:800, height: 800 }}>
+
+        <div style={{ width:800, height: 800 }}>
+          <Tree />
+        </div>
+
+      </Dialog>
+
     </div>
 
   </div>

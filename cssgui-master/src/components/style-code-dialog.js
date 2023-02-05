@@ -32,7 +32,7 @@ export function StyleCodeDialog({
         </pre>
       </div>
       <div className={`${Classes.DIALOG_FOOTER} copy-code-style-dialog-footer`}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS} style={{ paddingBottom: "20px" }} >
           <Button data-clipboard-text={codeText} className='clipboard-btn' icon="clipboard" intent='primary' onClick={showCopySuccessfullyMessage} >Copy</Button>
           <Button icon="cross" onClick={onClose} >Close</Button>
         </div>
