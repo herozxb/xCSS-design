@@ -277,28 +277,28 @@ function treeDataToJson(data) {
 
     for (let key in data) 
     {
-      //console.log("=============key===========")
-      //console.log(key)
+      ////console.log("=============key===========")
+      ////console.log(key)
       var value = data[key];
-      //console.log(value)
+      ////console.log(value)
 
 
       if (key ==="nodeType") {
         node.nodeType = value
-        //console.log("======nodeType======")
-        //console.log(value)
+        ////console.log("======nodeType======")
+        ////console.log(value)
       }
 
       if (key ==="tagName") {
         node.tagName = value
-        //console.log("======tagName======")
-        //console.log(value)
+        ////console.log("======tagName======")
+        ////console.log(value)
       }
 
       if (key ==="attributes") {
         node.attributes = value
-        //console.log("======attributes======")
-        //console.log(value)
+        ////console.log("======attributes======")
+        ////console.log(value)
       }
 
       if (key ==="textContent") {
@@ -306,11 +306,11 @@ function treeDataToJson(data) {
         node.nodeType = 3
         node.textContent = value
 
-        //console.log("======textContent======")
-        //console.log(value)
+        ////console.log("======textContent======")
+        ////console.log(value)
         
-        //console.log("==========children_node==========")
-        //console.log(node)
+        ////console.log("==========children_node==========")
+        ////console.log(node)
         return node
 
       }
@@ -323,16 +323,16 @@ function treeDataToJson(data) {
 
         if (typeof value === "object") {
           var children = []
-          //console.log("==========children_1==========")
-          //console.log(value)
+          ////console.log("==========children_1==========")
+          ////console.log(value)
 
           for (let i = 0; i < value.length; i++) {
             children.push(treeDataToJson(value[i]));
           }
 
           node.children = children
-          //console.log("==========children_2===========")
-          //console.log(children)
+          ////console.log("==========children_2===========")
+          ////console.log(children)
 
           if (value.length==0) {
 
@@ -346,8 +346,8 @@ function treeDataToJson(data) {
         }
 
 
-        //console.log("==========children_node==========")
-        //console.log(node)
+        ////console.log("==========children_node==========")
+        ////console.log(node)
         return node
 
 
@@ -360,38 +360,38 @@ function treeDataToJson(data) {
 
 const treeData = [mapDataToTreeData(data)];
 
-console.log("======3=======")
-console.log( treeData )
+//console.log("======3=======")
+//console.log( treeData )
 
 var rejson = treeDataToJson(treeData[0]) 
-console.log("==========rejson============")
-console.log( rejson )
-console.log( JSON.stringify(converter(rejson), null, 4) )
+//console.log("==========rejson============")
+//console.log( rejson )
+//console.log( JSON.stringify(converter(rejson), null, 4) )
 
 function converter(dom) {
 
 
-    //console.log("===========converter===========");
-    //console.log(dom)
+    ////console.log("===========converter===========");
+    ////console.log(dom)
     const obj = {};
     if (dom.nodeType === Node.TEXT_NODE) {
         obj.nodeType = 3
         obj.tagName = "a"
         obj.textContent = dom.textContent;
-        console.log("=========TEXT_NODE========")
-        console.log(obj)
+        //console.log("=========TEXT_NODE========")
+        //console.log(obj)
         return obj;
     }
     if (dom.nodeType === Node.DOCUMENT_NODE) {
-        ////console.log("document")
+        //////console.log("document")
         dom = dom.documentElement;
     }
 
     obj.nodeType = dom.nodeType;
     if (dom.nodeType === Node.ELEMENT_NODE) {
 
-        //console.log("=========ELEMENT_NODE========")
-        //console.log(dom)
+        ////console.log("=========ELEMENT_NODE========")
+        ////console.log(dom)
 
         obj.tagName = dom.tagName;
         obj.attributes = []; // Array.from(obj.attributes) gives us a lot of things we don't want
@@ -407,13 +407,13 @@ function converter(dom) {
 
 
         for (let i = 0; i < dom.children.length; ++i)  {
-            //console.log("=========for===========")
-            //console.log(dom.children[i])
+            ////console.log("=========for===========")
+            ////console.log(dom.children[i])
             obj.children.push(converter(dom.children[i]));
         }
         
-        //console.log("===========after============")
-        //console.log(obj)
+        ////console.log("===========after============")
+        ////console.log(obj)
 
     } else {
         obj.nodeType = 3
@@ -448,12 +448,12 @@ const json2html = json => toNode(JSON.parse(json))
 function get_dev_content()
 {
   var MyDiv1 = document.getElementsByClassName('canvas-panel')[0];
-  ////console.log(MyDiv1.innerHTML)
-  console.log("===================DOM=====================");
-  //console.log(MyDiv1)
+  //////console.log(MyDiv1.innerHTML)
+  //console.log("===================DOM=====================");
+  ////console.log(MyDiv1)
   const json = JSON.stringify(converter(MyDiv1), null, 4);
-  //console.log(json);
-  ////console.log(json2html(json));
+  ////console.log(json);
+  //////console.log(json2html(json));
   document.getElementsByTagName('body')[0].appendChild(   json2html( JSON.stringify( converter( rejson ), null, 4) ) );
 
 }
@@ -461,8 +461,8 @@ function get_dev_content()
 function change_dev_content(treeData)
 {
 
-  console.log("==========================change[1]==============================")
-  console.log(treeData[0])
+  //console.log("==========================change[1]==============================")
+  //console.log(treeData[0])
   document.getElementsByTagName('body')[0].appendChild(   json2html( JSON.stringify( converter( treeDataToJson(treeData[0]) ), null, 4) ) );
 
 }
@@ -479,8 +479,8 @@ class Tree extends React.Component {
 
   handleTreeOnChange = (treeData) => {
     this.setState({ treeData });
-    console.log("================change[0]================")
-    console.log(treeData)
+    //console.log("================change[0]================")
+    //console.log(treeData)
     change_dev_content(treeData)
   };
 

@@ -12,11 +12,7 @@ import ActionPanel from './components/action-panel';
 import Canvas from './components/canvas';
 import DevPanel from './components/dev-panel';
 
-
-
 function App() {
-
-
   return (
     <div className="App">
       <Helmet>

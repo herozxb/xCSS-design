@@ -431,9 +431,9 @@ function DevPanel() {
       {
         var value = data[key];
 
-        //console.log("==========1==========")
-        //console.log(key)
-        //console.log(value)
+        ////console.log("==========1==========")
+        ////console.log(key)
+        ////console.log(value)
 
         if (key ==="nodeType") {
           node.nodeType = 1
@@ -452,8 +452,8 @@ function DevPanel() {
 
         if (key ==="attributes") {
           node.attributes = value
-          //console.log("==============attributes===============")
-          //console.log(value)
+          ////console.log("==============attributes===============")
+          ////console.log(value)
           node.label = "DIV" + " " + value[0]["name"] + ":" + value[0]["value"] 
         }
 
@@ -467,8 +467,8 @@ function DevPanel() {
 
           id = id + 1
 
-          //console.log("===============textContent==================")
-          //console.log(node)
+          ////console.log("===============textContent==================")
+          ////console.log(node)
           return node
 
         }
@@ -523,7 +523,7 @@ function DevPanel() {
           return obj;
       }
       if (dom.nodeType === Node.DOCUMENT_NODE) {
-          ////console.log("document")
+          //////console.log("document")
           dom = dom.documentElement;
       }
 
@@ -575,12 +575,12 @@ function DevPanel() {
   function get_dev_content()
   {
     var MyDiv1 = document.getElementsByClassName('canvas-panel')[0];
-    ////console.log(MyDiv1.innerHTML)
+    //////console.log(MyDiv1.innerHTML)
     setDivData(MyDiv1.innerHTML)
-    ////console.log("========================================");
+    //////console.log("========================================");
     const json = JSON.stringify(converter(MyDiv1), null, 4);
-    ////console.log(json);
-    ////console.log(json2html(json));
+    //////console.log(json);
+    //////console.log(json2html(json));
     document.getElementsByTagName('body')[0].appendChild(json2html(json));
 
   }
@@ -598,7 +598,7 @@ function DevPanel() {
     const [collectedProps, drop] = useDrop({
       accept: "DRAGGABLE_ITEM",
       drop: (item, monitor) => {
-        //console.log(item);
+        ////console.log(item);
       }
     });
 

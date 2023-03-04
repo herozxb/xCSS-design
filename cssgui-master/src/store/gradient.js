@@ -12,10 +12,6 @@ export function computePercentage(offset) {
   return parseInt((parseFloat(offset / maxOffset) * 100))
 }
 
-const rgbToRgba = (rgb, a = 1) => rgb
-  .replace('rgb(', 'rgba(')
-  .replace(')', `, ${a})`)
-
 export const useGradientStore = create(persist((set, get) => ({
   minOffset,
   maxOffset,

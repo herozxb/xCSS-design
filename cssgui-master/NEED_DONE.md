@@ -1,5 +1,5 @@
 # 1 show the tree view of the DIV						[DONE]
-# 2 change the DIV view by tree data       				[NOT]
+# 2 change the DIV view by tree data       				[DONE]
 # 3 click the tree data and change the UI panel 		[NOT]
 # 4 change the showing DIV not add new one 				[NOT]
 # 5 add new class TEXT, IMAGE, DIV						[NOT]
