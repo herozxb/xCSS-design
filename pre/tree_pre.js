@@ -42,7 +42,7 @@ function Tree() {
 
   const inputEl = useRef();
 
-  // console.log(treeData);
+  // //console.log(treeData);
 
   function createNode() {
     const value = inputEl.current.value;
