@@ -358,7 +358,7 @@ function treeDataToJson(data) {
     
   }
 
-const treeData = [mapDataToTreeData(data)];
+var treeData = [mapDataToTreeData(data)];
 
 //console.log("======3=======")
 //console.log( treeData )
@@ -368,30 +368,65 @@ var rejson = treeDataToJson(treeData[0])
 //console.log( rejson )
 //console.log( JSON.stringify(converter(rejson), null, 4) )
 
-function converter(dom) {
 
 
-    ////console.log("===========converter===========");
-    ////console.log(dom)
+
+  function converter(dom) {
+
+      const obj = {};
+      if (dom.nodeType === Node.TEXT_NODE) {
+          obj.nodeType = 3
+          obj.tagName = "a"
+          obj.textContent = dom.nodeValue;
+          return obj;
+      }
+      if (dom.nodeType === Node.DOCUMENT_NODE) {
+          //////console.log("document")
+          dom = dom.documentElement;
+      }
+
+      obj.nodeType = dom.nodeType;
+      if (dom.nodeType === Node.ELEMENT_NODE) {
+          obj.tagName = dom.tagName;
+          obj.attributes = []; // Array.from(obj.attributes) gives us a lot of things we don't want
+          for (let i = 0, len = dom.attributes.length; i < len; ++i) {
+              const attr = dom.attributes[i];
+              obj.attributes.push({name: attr.name, value: attr.value});
+          }
+          obj.children = [];
+          for (let child = dom.firstChild; child; child = child.nextSibling) {
+              obj.children.push(converter(child));
+          }
+      } else {
+          obj.nodeType = 3
+          obj.tagName = "a"
+          obj.textContent = dom.nodeValue;
+      }
+      return obj;
+  }
+
+
+function converter_worked(dom) {
+
+
+    console.log("===========converter===========");
+    console.log(dom)
     const obj = {};
     if (dom.nodeType === Node.TEXT_NODE) {
         obj.nodeType = 3
         obj.tagName = "a"
         obj.textContent = dom.textContent;
-        //console.log("=========TEXT_NODE========")
-        //console.log(obj)
+        console.log("=========TEXT_NODE========")
+        console.log(obj)
         return obj;
     }
-    if (dom.nodeType === Node.DOCUMENT_NODE) {
-        //////console.log("document")
-        dom = dom.documentElement;
-    }
+
 
     obj.nodeType = dom.nodeType;
     if (dom.nodeType === Node.ELEMENT_NODE) {
 
-        ////console.log("=========ELEMENT_NODE========")
-        ////console.log(dom)
+        console.log("=========ELEMENT_NODE========")
+        console.log(dom.nodeType)
 
         obj.tagName = dom.tagName;
         obj.attributes = []; // Array.from(obj.attributes) gives us a lot of things we don't want
@@ -403,25 +438,28 @@ function converter(dom) {
 
         obj.children = [];
 
-        if ( dom.tagName == "A" ) { obj.children = dom.children; return obj }
+        if ( dom.tagName == "A" ) 
+        { 
+          console.log("=========A========")
+          obj.children = dom.children; 
+          return obj 
+        }
 
 
         for (let i = 0; i < dom.children.length; ++i)  {
-            ////console.log("=========for===========")
-            ////console.log(dom.children[i])
-            obj.children.push(converter(dom.children[i]));
+            console.log("=========for===========")
+            console.log(dom.children[i])
+            obj.children.push(converter_worked(dom.children[i]));
         }
         
-        ////console.log("===========after============")
-        ////console.log(obj)
+        console.log("===========after============")
+        console.log(obj)
+        return obj;
+    } 
 
-    } else {
-        obj.nodeType = 3
-        obj.tagName = "a"
-        obj.textContent = dom.nodeValue;
-    }
-    return obj;
+    
 }
+//*/
 
 const HtmlNode = (tagName, attributes = [], children = []) => {
   const e = document.createElement(tagName)
@@ -449,12 +487,33 @@ function get_dev_content()
 {
   var MyDiv1 = document.getElementsByClassName('canvas-panel')[0];
   //////console.log(MyDiv1.innerHTML)
-  //console.log("===================DOM=====================");
+  console.log("===================DOM=====================");
   ////console.log(MyDiv1)
   const json = JSON.stringify(converter(MyDiv1), null, 4);
-  ////console.log(json);
+  console.log(json);
   //////console.log(json2html(json));
-  document.getElementsByTagName('body')[0].appendChild(   json2html( JSON.stringify( converter( rejson ), null, 4) ) );
+
+  
+
+  const data = JSON.parse( json );
+  console.log("======3.0=======")
+  console.log( data )
+
+  var treeData = [mapDataToTreeData(data)];
+
+  console.log("======3=======")
+  console.log( treeData )
+
+  var rejson = treeDataToJson(treeData[0]) 
+  console.log("======3.1=======")
+  console.log(rejson)
+
+  console.log("======3.2=======")
+  console.log(converter_worked( rejson ))
+
+
+
+  document.getElementsByTagName('body')[0].appendChild(   json2html( JSON.stringify( converter_worked( rejson ), null, 4) ) );
 
 }
 
