@@ -516,8 +516,20 @@ function change_dev_content(treeData)
 {
 
   console.log("==========================change[1]==============================")
+
   console.log(treeData[0])
-  document.getElementsByTagName('body')[0].appendChild(   json2html( JSON.stringify( converter_worked( treeDataToJson(treeData[0]) ), null, 4) ) );
+
+  var html = json2html( JSON.stringify( converter_worked( treeDataToJson(treeData[0]) ), null, 4) )
+
+  //console.log("==========================change[2]==============================")
+  //console.log(html.innerHTML)
+
+  //console.log("==========================change[3]==============================")
+  var canvas_html = document.getElementsByClassName('canvas-panel')[0];
+  //console.log(canvas_html)
+  canvas_html.innerHTML = html.innerHTML;
+
+  //document.getElementsByTagName('body')[0].appendChild(  html  );
 
 }
 
