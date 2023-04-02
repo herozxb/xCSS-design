@@ -534,6 +534,8 @@ function change_dev_content(treeData)
 }
 
 import { useStore } from "../store";
+import {useCoreDataStore} from '../store/core'
+import {useUIStore} from '../store/ui'
 
 class Tree extends React.Component {
 
@@ -657,7 +659,11 @@ class Tree extends React.Component {
           <button
             onClick={ () => {
                 useStore.getState().setPink(), // <-- Changed code
-                console.log("click");console.log(useStore.getState().isPink);}
+                console.log("click");console.log(useStore.getState().isPink);
+                //useCoreDataStore.getState().deleteAllElement();
+                useCoreDataStore.getState().addNewElement(useUIStore.getState().setTargetId);
+
+              }
             }
           >
           pink
