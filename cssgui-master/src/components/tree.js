@@ -533,7 +533,7 @@ function change_dev_content(treeData)
 
 }
 
-
+import { useStore } from "../store";
 
 class Tree extends React.Component {
 
@@ -654,6 +654,15 @@ class Tree extends React.Component {
     return (
       <div className="wrapper_tree">
         <div className="bar_wrapper_tree">
+          <button
+            onClick={ () => {
+                useStore.getState().setPink(), // <-- Changed code
+                console.log("click");console.log(useStore.getState().isPink);}
+            }
+          >
+          pink
+          </button>
+          <p>{useStore.getState().isPink ? 'Is Pink' : 'Is Not Pink'}</p>
           <button onClick={() => get_dev_content()} >New Dev</button>
           <button onClick={this.toggleNodeExpansion.bind(this, true)}>
             Expand all
