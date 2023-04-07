@@ -473,6 +473,31 @@ const json2html = json => toNode(JSON.parse(json))
 
 
 
+function mapDivTree(element) {
+  const newChildren = Array.from(element.children).map(child => {
+    if (child.tagName === 'DIV') {
+      return mapDivTree(child);
+    } else {
+      return child;
+    }
+  });
+  const newElement = document.createElement('div');
+  const styles = element.getAttribute('style');
+  if (styles) {
+    styles.split(';').forEach(style => {
+      if (style) {
+        const [property, value] = style.split(':').map(s => s.trim());
+        newElement.style.setProperty(property, value);
+      }
+    });
+  }
+  newElement.appendChild(document.importNode(element, true));
+  newElement.replaceChildren(...newChildren);
+  return newElement;
+}
+
+
+
 
 
 var data = JSON.parse( JSON.stringify( json_data ) );
@@ -510,6 +535,25 @@ function get_dev_content()
 
   document.getElementsByTagName('body')[0].appendChild(   json2html( JSON.stringify( converter_worked( rejson ), null, 4) ) );
 
+
+
+  const tree = document.createElement('div');
+tree.innerHTML = `
+  <div style="background-color: red;">
+    <span>Hello</span>
+    <div style="background-color: blue;">
+      <span>World</span>
+    </div>
+  </div>
+`;
+
+  const mappedTree = mapDivTree(tree);
+  console.log("====================map=======================")
+  console.log(mappedTree)
+
+  document.getElementsByTagName('body')[0].appendChild(mappedTree);
+
+
 }
 
 function change_dev_content(treeData)
@@ -536,6 +580,7 @@ function change_dev_content(treeData)
 import { useStore } from "../store";
 import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
+import { getNewState } from '../element-state-template'
 
 class Tree extends React.Component {
 
@@ -662,6 +707,13 @@ class Tree extends React.Component {
                 console.log("click");console.log(useStore.getState().isPink);
                 //useCoreDataStore.getState().deleteAllElement();
                 useCoreDataStore.getState().addNewElement(useUIStore.getState().setTargetId);
+                useCoreDataStore.getState().updateTargetStyle('backgroundColor', 'orange')
+                useCoreDataStore.getState().updateTargetStyle('width', 500);
+                var left = 300;
+                var top  = 300;
+                useCoreDataStore.getState().addNewElement();
+                useCoreDataStore.getState().updateSingleElement(getNewState({ left, top }));
+                useCoreDataStore.getState().updateTargetStyle('width', 1000);
 
               }
             }

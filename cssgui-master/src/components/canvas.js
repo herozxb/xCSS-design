@@ -71,3 +71,47 @@ function Canvas() {
 }
 
 export default Canvas
+
+
+
+/*
+
+function mapDivTree(element) {
+  const newChildren = Array.from(element.children).map(child => {
+    if (child.tagName === 'DIV') {
+      return mapDivTree(child);
+    } else {
+      return child;
+    }
+  });
+  const newElement = document.createElement('div');
+  const styles = element.getAttribute('style');
+  if (styles) {
+    styles.split(';').forEach(style => {
+      if (style) {
+        const [property, value] = style.split(':').map(s => s.trim());
+        newElement.style.setProperty(property, value);
+      }
+    });
+  }
+  newElement.appendChild(document.importNode(element, true));
+  newElement.replaceChildren(...newChildren);
+  return newElement;
+}
+
+const tree = document.createElement('div');
+tree.innerHTML = `
+  <div style="background-color: red;">
+    <span>Hello</span>
+    <div style="background-color: blue;">
+      <span>World</span>
+    </div>
+  </div>
+`;
+
+const mappedTree = mapDivTree(tree);
+
+document.body.appendChild(mappedTree);
+
+
+//*/
