@@ -13,13 +13,59 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const useCoreDataStore = create(persist((set, get) => ({
   elementCollection: {},
+
   targetId: null,
   setTargetId: (value) => set({ targetId: value }),
   updateSingleElement: (newState) => {
     set(produce((state) => {
-      state.elementCollection[state.targetId] = newState;
+      state.elementCollection[state.targetId] = { "css" : newState, "children" : {"hello":"world"} };
     }));
   },
+
+  updateTreeElement: (newState, children) => {
+    set(produce((state) => {
+      state.elementCollection[state.targetId] = { "css" : newState, "children" : children };
+    }));
+  },
+
+
+  addNewTreeElement: () => {
+    set(() => {
+
+      //get().addNewElement();
+
+      const id = uuidv4();
+      get().setTargetId(id)
+
+      console.log("===id_1===")
+      console.log(get().targetId)
+
+      const canvasPanel = document.querySelector('.canvas-panel');
+      const canvasPanelStyle = window.getComputedStyle(canvasPanel);
+      const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
+      const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
+
+      const width = 300;
+      const height = 300;
+
+      const top = canvasPanelHeight / 2 - height / 2;
+      const left = canvasPanelWidth / 2 - width / 2
+
+
+      var id_children = get().targetId
+
+      console.log("===id_2===")
+      console.log(get().targetId)
+      
+      get().updateTreeElement(getNewState({ width, height, left, top }), get().elementCollection );
+
+      console.log("==================elementCollection_tree====================")
+      console.log(get().elementCollection)
+      console.log(id_children)
+
+    })
+  },
+//*/
   addNewElement: () => {
     set(() => {
       const id = uuidv4();
@@ -37,21 +83,29 @@ export const useCoreDataStore = create(persist((set, get) => ({
       const left = canvasPanelWidth / 2 - width / 2
 
       get().updateSingleElement(getNewState({ width, height, left, top }));
+
+      console.log("==================elementCollection_new====================")
+      console.log(get().elementCollection)
+
+      return id;
+
     })
   },
+
+
   getTargetStyle(name) {
     const targetId = get().targetId;
     if (!targetId) {
       return 0;
     }
-    return get().elementCollection[targetId][name];
+    return get().elementCollection[targetId]["css"][name];
   },
   getTargetElementState() {
     const targetId = get().targetId;
     if (!targetId) {
       return;
     }
-    return get().elementCollection[targetId];
+    return get().elementCollection[targetId]["css"];
   },
   updateTargetStyle(name, value) {
     const targetId = get().targetId;
@@ -61,15 +115,15 @@ export const useCoreDataStore = create(persist((set, get) => ({
     set(produce((state) => {
       const originElementCollection = state.elementCollection;
       const targetId = get().targetId;
-      const originTargetElementState = originElementCollection[targetId];
+      const originTargetElementState = originElementCollection[targetId]["css"];
       if (useUIStore.getState().applyToAll) {
         Object.keys(originElementCollection).forEach(id => {
-          state.elementCollection[id][name] = value;
-          state.elementCollection[id].top = originTargetElementState.top;
-          state.elementCollection[id].left = originTargetElementState.left;
+          state.elementCollection[id]["css"][name] = value;
+          state.elementCollection[id]["css"].top = originTargetElementState.top;
+          state.elementCollection[id]["css"].left = originTargetElementState.left;
         })
       } else {
-        state.elementCollection[targetId][name] = value;
+        state.elementCollection[targetId]["css"][name] = value;
       }
     }))
   },
@@ -88,7 +142,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
   },
   copyElement() {
     const targetId = get().targetId;
-    const targetElementState = get().elementCollection[targetId];
+    const targetElementState = get().elementCollection[targetId]["css"];
 
     get().setTargetId(uuidv4())
     get().updateSingleElement({
@@ -102,7 +156,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
       const originElementCollection = state.elementCollection;
       const targetId = get().targetId;
       const cloneElementWhenAddMultipleElements = useUIStore.getState().cloneElementWhenAddMultipleElements;
-      const selectedElementState = originElementCollection[targetId];
+      const selectedElementState = originElementCollection[targetId]["css"];
       const randomElementCount = useConfigStore.getState().randomElementCount;
 
       const canvasPanel = document.querySelector('.canvas-panel');
@@ -118,7 +172,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
           ? selectedElementState
           : getNewState({ left, top });
 
-        state.elementCollection[uuidv4()] = {
+        state.elementCollection[uuidv4()]["css"] = {
           ...sourceState,
           left,
           top

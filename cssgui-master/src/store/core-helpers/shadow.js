@@ -5,13 +5,13 @@ export function factory(set, get) {
     removeShadow(index) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].boxShadow.splice(index, 1)
+        state.elementCollection[targetId]["css"].boxShadow.splice(index, 1)
       }));
     },
     addShadow() {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].boxShadow.push({
+        state.elementCollection[targetId]["css"].boxShadow.push({
           enableInset: false,
           offsetX: 5,
           offsetY: 5,
@@ -26,7 +26,7 @@ export function factory(set, get) {
     updateShadow(index, name, value) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].boxShadow[index][name] = value;
+        state.elementCollection[targetId]["css"].boxShadow[index][name] = value;
       }));
     },
 

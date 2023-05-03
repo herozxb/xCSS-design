@@ -2,7 +2,7 @@ export function extractStyle(renderHookResult, name) {
   if (!renderHookResult || !renderHookResult.current) {
     return;
   }
-  return renderHookResult.current.elementCollection[renderHookResult.current.targetId][name]
+  return renderHookResult.current.elementCollection[renderHookResult.current.targetId]["css"][name]
 }
 
 export function extractLatestElementStyle(renderHookResult, name) {
@@ -10,7 +10,7 @@ export function extractLatestElementStyle(renderHookResult, name) {
     return;
   }
   const allIds = Object.keys(renderHookResult.current.elementCollection)
-  return renderHookResult.current.elementCollection[allIds[allIds.length - 1]][name]
+  return renderHookResult.current.elementCollection[allIds[allIds.length - 1]]["css"][name]
 }
 
 export function verifyEveryElementStyle(renderHookResult, name, value) {
@@ -19,6 +19,6 @@ export function verifyEveryElementStyle(renderHookResult, name, value) {
   }
   const allIds = Object.keys(renderHookResult.current.elementCollection)
   return allIds.every(id => {
-    return renderHookResult.current.elementCollection[id][name] === value
+    return renderHookResult.current.elementCollection[id]["css"][name] === value
   })
 }

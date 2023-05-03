@@ -94,11 +94,11 @@ describe('Core Store', () => {
     act(() => {
       result.current.addNewElement();
     })
-    const elementCountBeforeDelete = Object.keys(result.current.elementCollection).length;
+    const elementCountBeforeDelete = Object.keys(result.current.elementCollection.css).length;
     act(() => {
       result.current.deleteElement();
     })
-    expect(Object.keys(result.current.elementCollection).length).toBe(elementCountBeforeDelete - 1)
+    expect(Object.keys(result.current.elementCollection.css).length).toBe(elementCountBeforeDelete - 1)
   })
   it('should able to copy element', () => {
     const { result } = renderHook(() => useCoreDataStore())
@@ -108,11 +108,11 @@ describe('Core Store', () => {
       result.current.updateTargetStyle('top', 300);
       result.current.updateTargetStyle('left', 400);
     })
-    const elementCountBeforeDelete = Object.keys(result.current.elementCollection).length;
+    const elementCountBeforeDelete = Object.keys(result.current.elementCollection.css).length;
     act(() => {
       result.current.copyElement();
     })
-    expect(Object.keys(result.current.elementCollection).length).toBe(elementCountBeforeDelete + 1)
+    expect(Object.keys(result.current.elementCollection.css).length).toBe(elementCountBeforeDelete + 1)
     expect(extractStyle(result, 'backgroundColor')).toBe('orange')
     expect(extractStyle(result, 'top')).toBe(320)
     expect(extractStyle(result, 'left')).toBe(420)
@@ -128,7 +128,7 @@ describe('Core Store', () => {
     act(() => {
       coreResult.current.generateElements();
     })
-    expect(Object.keys(coreResult.current.elementCollection).length).toBe(elementCountBeforeDelete + 10)
+    expect(Object.keys(coreResult.current.elementCollection.css).length).toBe(elementCountBeforeDelete + 10)
     expect(extractLatestElementStyle(coreResult, 'backgroundColor')).toBe('#FFFFFF')
   })
   it('should able to generate elements by clone selected element', () => {
@@ -141,19 +141,19 @@ describe('Core Store', () => {
       configResult.current.setRandomElementCount(10)
       uiResult.current.toggleCloneElementWhenAddMultipleElements(true)
     })
-    const elementCountBeforeDelete = Object.keys(coreResult.current.elementCollection).length;
+    const elementCountBeforeDelete = Object.keys(coreResult.current.elementCollection.css).length;
     act(() => {
       coreResult.current.generateElements();
     })
-    expect(Object.keys(coreResult.current.elementCollection).length).toBe(elementCountBeforeDelete + 10)
+    expect(Object.keys(coreResult.current.elementCollection.css).length).toBe(elementCountBeforeDelete + 10)
     expect(extractLatestElementStyle(coreResult, 'backgroundColor')).toBe('orange')
   })
   it('should able to delete all elements', () => {
     const { result } = renderHook(() => useCoreDataStore())
-    expect(Object.keys(result.current.elementCollection).length).not.toBe(0)
+    expect(Object.keys(result.current.elementCollection.css).length).not.toBe(0)
     act(() => {
       result.current.deleteAllElement();
     })
-    expect(Object.keys(result.current.elementCollection).length).toBe(0)
+    expect(Object.keys(result.current.elementCollection.css).length).toBe(0)
   })
 })

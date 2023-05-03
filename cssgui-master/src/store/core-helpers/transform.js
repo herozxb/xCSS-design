@@ -5,13 +5,13 @@ export function factory(set, get) {
     updateTransform(type, coordinate, value) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].transform[type][coordinate] = value;
+        state.elementCollection[targetId]["css"].transform[type][coordinate] = value;
       }));
     },
     resetTranslate() {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].transform.translate = {
+        state.elementCollection[targetId]["css"].transform.translate = {
           x: 0,
           y: 0,
           z: 0
@@ -21,7 +21,7 @@ export function factory(set, get) {
     resetScale() {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].transform.scale = {
+        state.elementCollection[targetId]["css"].transform.scale = {
           x: 1,
           y: 1,
           z: 1
@@ -31,7 +31,7 @@ export function factory(set, get) {
     resetSkew() {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].transform.skew = {
+        state.elementCollection[targetId]["css"].transform.skew = {
           x: 0,
           y: 0,
         }

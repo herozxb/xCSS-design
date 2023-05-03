@@ -7,43 +7,43 @@ export function factory(set, get) {
     updateAnimationProperty(key, value) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].animation[key] = value
+        state.elementCollection[targetId]["css"].animation[key] = value
       }));
     },
     updateAnimationAnimatedProperties(property, value) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].animation.animatedProperties[property] = value
+        state.elementCollection[targetId]["css"].animation.animatedProperties[property] = value
       }));
     },
     saveAnimationStartStatus(status) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].animation.animationTimeline[0] = status
+        state.elementCollection[targetId]["css"].animation.animationTimeline[0] = status
       }));
     },
     saveAnimationEndStatus(status) {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].animation.animationTimeline[1] = status;
+        state.elementCollection[targetId]["css"].animation.animationTimeline[1] = status;
       }));
     },
     stopAnimation() {
       const targetId = get().targetId;
       set(produce((state) => {
-        const { animation: { name } } = state.elementCollection[targetId];
+        const { animation: { name } } = state.elementCollection[targetId]["css"];
         if (!name) {
           return;
         }
         const style = document.querySelector(`#${name}`);
         style.parentElement.removeChild(style);
-        state.elementCollection[targetId].animation.name = '';
+        state.elementCollection[targetId]["css"].animation.name = '';
       }));
     },
     playAnimation() {
       const targetId = get().targetId;
       set(produce((state) => {
-        const { animation: { animationTimeline } } = state.elementCollection[targetId];
+        const { animation: { animationTimeline } } = state.elementCollection[targetId]["css"];
         if (!animationTimeline.length) {
           return;
         }
@@ -62,13 +62,13 @@ export function factory(set, get) {
       }`
         head.appendChild(style)
         style.appendChild(document.createTextNode(css));
-        state.elementCollection[targetId].animation.name = name;
+        state.elementCollection[targetId]["css"].animation.name = name;
       }));
     },
     getStatusByProperties() {
       const result = [];
       const targetId = get().targetId;
-      const sourceElementState = get().elementCollection[targetId];
+      const sourceElementState = get().elementCollection[targetId]["css"];
       const { animation: { animatedProperties } } = sourceElementState;
       Object.keys(animatedProperties).forEach(property => {
         const value = animatedProperties[property]

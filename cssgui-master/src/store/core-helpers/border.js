@@ -8,17 +8,17 @@ export function factory(set, get) {
         const selectedElementState = get().getTargetElementState()
         const selectedElementStateTopBorder = selectedElementState.border.top;
 
-        state.elementCollection[targetId].borderAllInOne = true;
-        state.elementCollection[targetId].border.top = selectedElementStateTopBorder;
-        state.elementCollection[targetId].border.bottom = selectedElementStateTopBorder;
-        state.elementCollection[targetId].border.left = selectedElementStateTopBorder;
-        state.elementCollection[targetId].border.right = selectedElementStateTopBorder;
+        state.elementCollection[targetId]["css"].borderAllInOne = true;
+        state.elementCollection[targetId]["css"].border.top = selectedElementStateTopBorder;
+        state.elementCollection[targetId]["css"].border.bottom = selectedElementStateTopBorder;
+        state.elementCollection[targetId]["css"].border.left = selectedElementStateTopBorder;
+        state.elementCollection[targetId]["css"].border.right = selectedElementStateTopBorder;
       }));
     },
     disableBorderAllInOne() {
       const targetId = get().targetId;
       set(produce((state) => {
-        state.elementCollection[targetId].borderAllInOne = false;
+        state.elementCollection[targetId]["css"].borderAllInOne = false;
       }));
     },
     toggleBorderAllInOne() {
@@ -31,23 +31,23 @@ export function factory(set, get) {
     toggleEnableBorder() {
       const targetId = get().targetId;
       set(produce((state) => {
-        if (state.elementCollection[targetId].borderEnabled) {
-          state.elementCollection[targetId].borderEnabled = false;
+        if (state.elementCollection[targetId]["css"].borderEnabled) {
+          state.elementCollection[targetId]["css"].borderEnabled = false;
         } else {
-          state.elementCollection[targetId].borderEnabled = true;
+          state.elementCollection[targetId]["css"].borderEnabled = true;
         }
       }));
     },
     updateBorder(name, value, position) {
         const targetId = get().targetId;
         set(produce((state) => {
-          if (state.elementCollection[targetId].borderAllInOne) {
-            state.elementCollection[targetId].border['top'][name] = value;
-            state.elementCollection[targetId].border['bottom'][name] = value;
-            state.elementCollection[targetId].border['left'][name] = value;
-            state.elementCollection[targetId].border['right'][name] = value;
+          if (state.elementCollection[targetId]["css"].borderAllInOne) {
+            state.elementCollection[targetId]["css"].border['top'][name] = value;
+            state.elementCollection[targetId]["css"].border['bottom'][name] = value;
+            state.elementCollection[targetId]["css"].border['left'][name] = value;
+            state.elementCollection[targetId]["css"].border['right'][name] = value;
           } else {
-            state.elementCollection[targetId].border[position][name] = value;
+            state.elementCollection[targetId]["css"].border[position][name] = value;
           }
         }));
     },

@@ -31,6 +31,7 @@ function ActionPanel() {
     targetId,
     generateElements,
     addNewElement,
+    addNewTreeElement,
     copyElement,
     deleteElement,
     deleteAllElement,
@@ -84,7 +85,7 @@ function ActionPanel() {
       </div>
     </Dialog>
     <ButtonGroup fill style={{ marginTop: 10 }}>
-      <Button onClick={() => addNewElement(setTargetId)} icon="plus">New</Button>
+      <Button onClick={ () => {  addNewTreeElement() } } icon="plus">New</Button>
       {/* <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object"  disabled={!targetId}>Random</Button> */}
       <Button onClick={copyElement} disabled={!targetId} icon="duplicate">Clone</Button>
     </ButtonGroup>

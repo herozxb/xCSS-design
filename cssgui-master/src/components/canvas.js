@@ -25,7 +25,7 @@ function Canvas() {
 
   function recordMouseDownPosition(targetId, event) {
     const { clientX, clientY } = event;
-    const elementState = elementCollection[targetId];
+    const elementState = elementCollection[targetId]["css"];
 
     setTargetId(targetId);
     setDragStartElementPoint([elementState.left, elementState.top])
@@ -46,7 +46,7 @@ function Canvas() {
     const [dragStartElementPointX, dragStartElementPointY] = dragStartElementPoint
 
     updateSingleElement({
-      ...elementCollection[targetId],
+      ...elementCollection[targetId]["css"],
       left: dragStartElementPointX + (clientX - dragStartPointX),
       top: dragStartElementPointY + (clientY - dragStartPointY),
     })
@@ -54,7 +54,12 @@ function Canvas() {
   }
 
   return <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} >{Object.keys(elementCollection).map(id => {
-    const elementState = elementCollection[id];
+    const elementState = elementCollection[id]["css"];
+
+    console.log("================canvas==============")
+    console.log(elementCollection)
+    console.log(elementCollection[id])
+    console.log(elementState)
     return <div
       className='canvas-item'
       onMouseDown={recordMouseDownPosition.bind(this, id)}

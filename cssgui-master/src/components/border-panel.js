@@ -159,13 +159,13 @@ function BorderPanelContainer() {
     targetId
   } = dataState;
   const targetElementState = elementCollection[targetId];
-  const borders = targetId ? targetElementState.border : null;
+  const borders = targetId ? targetElementState["css"].border : null;
 
   return <OptimizedBorderPanelContainer
     key={targetId}
-    enabled={targetId ? targetElementState.borderEnabled : false}
+    enabled={targetId ? targetElementState["css"].borderEnabled : false}
     onToggleEnabled={toggleEnableBorder}
-    borderAllInOne={targetId ? targetElementState.borderAllInOne : false}
+    borderAllInOne={targetId ? targetElementState["css"].borderAllInOne : false}
     onToggleAllInOne={toggleBorderAllInOne}
     borders={borders}
     onAllWidthChange={value => updateBorder('width', value)}
