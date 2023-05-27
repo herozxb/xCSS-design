@@ -1,6 +1,7 @@
 import React from 'react'
 import {
-  createStyleObj
+  createStyleObj,
+  createStyleText
 } from "../utils";
 
 import {useCoreDataStore} from '../store/core'
@@ -53,13 +54,43 @@ function Canvas() {
 
   }
 
+const tree = {
+  name: "Root",
+  children: [
+    {
+      name: "Child 1",
+      children: [],
+    },
+    {
+      name: "Child 2",
+      children: [],
+    },
+  ],
+};
+
+function createDivTree(tree) {
+  if (!tree) {
+    return null;
+  }
+
+  return (
+    <div style={{ backgroundColor: "green", width: 1000, height: 1000 }}>
+      {tree.name}
+      {tree.children.map((child) => (
+        <div key={child.id}>{createDivTree(child)}</div>
+      ))}
+    </div>
+  );
+}
+
   return <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} >{Object.keys(elementCollection).map(id => {
     const elementState = elementCollection[id]["css"];
 
-    console.log("================canvas==============")
-    console.log(elementCollection)
-    console.log(elementCollection[id])
+    console.log("==========elementState=========")
     console.log(elementState)
+
+    return createDivTree(tree);
+
     return <div
       className='canvas-item'
       onMouseDown={recordMouseDownPosition.bind(this, id)}
@@ -69,6 +100,7 @@ function Canvas() {
       style={createStyleObj(elementState)}>
       {id == targetId && <div className="selected-element-cursor"></div>}
     </div>
+
   })}
     {showAnimationPanel && <AnimationPanel />}
     <Footer></Footer>
@@ -78,45 +110,3 @@ function Canvas() {
 export default Canvas
 
 
-
-/*
-
-function mapDivTree(element) {
-  const newChildren = Array.from(element.children).map(child => {
-    if (child.tagName === 'DIV') {
-      return mapDivTree(child);
-    } else {
-      return child;
-    }
-  });
-  const newElement = document.createElement('div');
-  const styles = element.getAttribute('style');
-  if (styles) {
-    styles.split(';').forEach(style => {
-      if (style) {
-        const [property, value] = style.split(':').map(s => s.trim());
-        newElement.style.setProperty(property, value);
-      }
-    });
-  }
-  newElement.appendChild(document.importNode(element, true));
-  newElement.replaceChildren(...newChildren);
-  return newElement;
-}
-
-const tree = document.createElement('div');
-tree.innerHTML = `
-  <div style="background-color: red;">
-    <span>Hello</span>
-    <div style="background-color: blue;">
-      <span>World</span>
-    </div>
-  </div>
-`;
-
-const mappedTree = mapDivTree(tree);
-
-document.body.appendChild(mappedTree);
-
-
-//*/

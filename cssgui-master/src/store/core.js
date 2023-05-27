@@ -18,7 +18,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
   setTargetId: (value) => set({ targetId: value }),
   updateSingleElement: (newState) => {
     set(produce((state) => {
-      state.elementCollection[state.targetId] = { "css" : newState, "children" : {"hello":"world"} };
+      state.elementCollection[state.targetId] = { "css" : newState, "children" : {"id":"world"} };
     }));
   },
 
@@ -32,7 +32,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
   addNewTreeElement: () => {
     set(() => {
 
-      //get().addNewElement();
+      get().addNewElement();
 
       const id = uuidv4();
       get().setTargetId(id)

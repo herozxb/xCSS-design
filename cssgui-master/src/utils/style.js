@@ -67,3 +67,45 @@ export function createStyleObj(elementState) {
         zIndex: elementState.zIndex
     }
 }
+
+export function createStyleText(elementState) {
+    const border = elementState.border;
+
+    var css_text = 
+    "background: " +
+      (elementState.enableGradientBackground ?
+        createGradientString(elementState.backgroundGradientStops, elementState.backgroundGradientAngle) :
+        elementState.backgroundColor) +
+    "; width: " +
+      elementState.width +
+    "; height: " +
+      elementState.height +
+    "; top: " +
+      elementState.top +
+    "; left: " +
+      elementState.left +
+    "; position: absolute; border-top: " +
+      (!elementState.borderEnabled ? "none" : `${border.top.width}px ${border.top.style} ${border.top.color}`) +
+    "; border-bottom: " +
+      (!elementState.borderEnabled ? "none" : `${border.bottom.width}px ${border.bottom.style} ${border.bottom.color}`) +
+    "; border-left: " +
+      (!elementState.borderEnabled ? "none" : `${border.left.width}px ${border.left.style} ${border.left.color}`) +
+    "; border-right: " +
+      (!elementState.borderEnabled ? "none" : `${border.right.width}px ${border.right.style} ${border.right.color}`) +
+    "; box-shadow: " +
+      createBoxShadowString(elementState.boxShadow) +
+    "; display: flex; justify-content: center; align-items: center; transform: " +
+      createTransformString(elementState.transform) +
+    "; animation-duration: " +
+      `${elementState.animation.duration}s` + 
+    "; animation-delay: " +
+      `${elementState.animation.delay}s` +
+    "; animation-timing-function: " +
+      elementState.animation.timing +
+    "; animation-iteration-count: infinite; animation-name: " +
+      elementState.animation.name +
+    "; z-index: " +
+      elementState.zIndex;
+
+    return css_text
+}
