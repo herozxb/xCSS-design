@@ -68,16 +68,22 @@ const tree = {
   ],
 };
 
-function createDivTree(tree) {
+function createDivTree(tree,elementState,id) {
   if (!tree) {
     return null;
   }
 
   return (
-    <div style={{ backgroundColor: "green", width: 1000, height: 1000 }}>
+    <div style={createStyleObj(elementState)}
+         onMouseDown={recordMouseDownPosition.bind(this, id)}
+         onMouseUp={recordMouseUpPosition}
+         onClick={() => setTargetId(id)}
+         key={id}
+
+    >
       {tree.name}
       {tree.children.map((child) => (
-        <div key={child.id}>{createDivTree(child)}</div>
+        <div key={id}>{createDivTree(child,elementState,id)}</div>
       ))}
     </div>
   );
@@ -89,7 +95,7 @@ function createDivTree(tree) {
     console.log("==========elementState=========")
     console.log(elementState)
 
-    return createDivTree(tree);
+    return createDivTree( tree, elementState, id);
 
     return <div
       className='canvas-item'
